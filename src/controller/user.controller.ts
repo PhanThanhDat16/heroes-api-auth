@@ -6,11 +6,13 @@ import { userService } from '~/service/user.service'
 import jwt from 'jsonwebtoken'
 import { User } from '~/model/user.model'
 import { EHttpStatus } from '~/types/httpStatus'
+import { tagService } from '~/service/tag.service'
 
 
 export const userController = {
   register: async (req: Request, res: Response) => {
     const data = req.body
+    console.log(data)
     try {
       const validator = userValidator(data)
       if (Object.keys(validator).length > 0) {
@@ -90,16 +92,23 @@ export const userController = {
   getUserDetail: async( req: Request, res: Response) => {
     const userId = req.params.id
     try {
-      const user = userService.getUserById(userId)
+      const user = await userService.getUserById(userId)
       if(!user){
         res.status(EHttpStatus.NOT_FOUND).json({
           message: "User not found"
         })
         return
       }
-      
+
+      const tags = await tagService.getTagsByUserId(userId)
+
+      const data = {
+        ...user,
+        tags
+      }
+
       res.status(EHttpStatus.OK).json({
-        data: user
+        data
       })
     } catch (error) {
       res.status(EHttpStatus.INTERNAL_SERVER_ERROR).json({

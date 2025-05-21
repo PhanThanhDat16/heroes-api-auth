@@ -6,6 +6,8 @@ const router = express.Router()
 router.post('/register', userController.register)
 router.put('/:id', requireAuth, userController.updateUser)
 router.get('/profile', requireAuth, userController.getProfile)
+router.get('/:id', requireAuth, userController.getUserDetail)
+
 
 
 // router.get('/:id/tags', requireAuth, userController.getTags)
