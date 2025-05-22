@@ -133,6 +133,7 @@ export const tagController = {
   updateTagMultipleHeroes: async (req: Request, res: Response) => {
     const userId = req.params.id
     const { tags, heroIds } = req.body
+
     try {
       const user = await userService.getUserById(userId)
       if (!user) {
@@ -141,8 +142,6 @@ export const tagController = {
         })
         return
       }
-
-      console.log(tags, heroIds)
 
       let data
       try {
