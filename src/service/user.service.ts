@@ -28,16 +28,10 @@ export const userService = {
   },
 
   getUserById: async (id: string) => {
-    const user = await User.findById(id).lean()
-    if (!user) return false
+    const user = await User.findById(id).select('-password').lean()
+    if (!user) return null
     return user
   },
-
-
-
-
-
-
 
   // getTagsByUserId: async (id: string) => {
   //   const user = await User.findById(id).select('tags')

@@ -68,7 +68,6 @@ export const authController = {
           res.status(EHttpStatus.FORBIDDEN).json({ message: `Refresh token is not valid ${err}` })
           return
         }
-        // console.log(user)
 
         const tokenExists = await refreshTokenService.exists(refreshToken)
         if (!tokenExists) {
@@ -96,6 +95,30 @@ export const authController = {
     try {
       await refreshTokenService.delete(refreshToken)
       res.status(EHttpStatus.OK).json({ message: 'Logged out successfully' })
+    } catch (error) {
+      res.status(EHttpStatus.INTERNAL_SERVER_ERROR).json({
+        message: 'Internal server error ' + error
+      })
+    }
+  },
+
+  verifyAccessToken: async ( req: Request, res: Response) => {
+    const {accessToken} = req.body
+    try {
+      if(!accessToken){
+        res.status(EHttpStatus.FORBIDDEN).json({ message: 'You are not authenticated' })
+        return
+      }
+
+      jwt.verify(accessToken, process.env.SECRETKEY_ACCESSTOKEN as string, async(err: any, user: any) => {
+        if(err){
+          res.status(EHttpStatus.FORBIDDEN).json({ message: `AccessToken is not valid ${err}` })
+          return
+        }
+        res.status(EHttpStatus.OK).json({
+          message: 'Verify successfull'
+        })
+      })
     } catch (error) {
       res.status(EHttpStatus.INTERNAL_SERVER_ERROR).json({
         message: 'Internal server error ' + error
