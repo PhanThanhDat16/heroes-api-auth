@@ -145,7 +145,7 @@ export const tagController = {
 
       let data
       try {
-        const res = await axios.put(`${process.env.HTTP_URL_HERO}/heroes/tags`, { tags, heroIds })
+        const res = await axios.put(`${process.env.HTTP_URL_HERO}/internal/heroes/tags`, { tags, heroIds })
         data = res.data
       } catch (error: any) {
         res.status(EHttpStatus.BAD_REQUEST).json({ message: error.error.message })
@@ -176,7 +176,7 @@ export const tagController = {
 
       let data
       try {
-        const res = await axios.delete(`${process.env.HTTP_URL_HERO}/heroes/tags`, { data: { tags, heroIds } })
+        const res = await axios.delete(`${process.env.HTTP_URL_HERO}/internal/heroes/tags`, { data: { tags, heroIds } })
         console.log(res.data)
         data = res.data
       } catch (error: any) {
