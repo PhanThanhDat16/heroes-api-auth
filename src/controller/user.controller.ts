@@ -136,9 +136,51 @@ export const userController = {
         message: `Internal server error: ${error}`
       })
     }
-  }
+  },
 
+  getAllUser: async(req: Request, res: Response) => {
+    const search = req.query.search as string | undefined
+    try {
+      const users = await userService.getAllUser(search)
 
-
+      res.status(EHttpStatus.OK).json({
+        message: 'Find user successfully',
+        data: users
+      })
+    } catch (error) {
+      res.status(EHttpStatus.INTERNAL_SERVER_ERROR).json({
+        message: `Internal server error: ${error}`
+      })
+    }
+  },
   
+  getListUsersById: async(req: Request, res: Response) => {
+    const data = req.body
+    try {
+      const users = await userService.getListUserById(data.listUserId)
+      res.status(EHttpStatus.OK).json({
+        message: 'Find user successfully',
+        data: users
+      })
+    } catch (error) {
+      res.status(EHttpStatus.INTERNAL_SERVER_ERROR).json({
+        message: `Internal server error: ${error}`
+      })
+    }
+  },
+
+  getListUserByGroup: async (req: Request, res: Response) => {
+    const data = req.body
+    try {
+      const users = await userService.getListUserByGroup(data)
+      res.status(EHttpStatus.OK).json({
+        message: 'Find user in group successfully',
+        data: users
+      })
+    } catch (error) {
+      res.status(EHttpStatus.INTERNAL_SERVER_ERROR).json({
+        message: `Internal server error: ${error}`
+      })
+    }
+  }
 }

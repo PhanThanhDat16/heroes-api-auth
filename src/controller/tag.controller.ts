@@ -162,7 +162,6 @@ export const tagController = {
 
   deleteTagMultipleHeroes: async (req: Request, res: Response) => {
     const userId = req.params.id
-    console.log(userId)
     const { tags, heroIds } = req.body
     try {
 
@@ -177,7 +176,6 @@ export const tagController = {
       let data
       try {
         const res = await axios.delete(`${process.env.HTTP_URL_HERO}/internal/heroes/tags`, { data: { tags, heroIds } })
-        console.log(res.data)
         data = res.data
       } catch (error: any) {
         res.status(EHttpStatus.BAD_REQUEST).json({ message: error.error.message })
