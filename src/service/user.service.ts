@@ -21,8 +21,6 @@ export const userService = {
       return false
     }
 
-    console.log('HREOOOOOOO')
-
     const user = await User.findByIdAndUpdate(id, data, { new: true })
     return user
   },
@@ -33,33 +31,31 @@ export const userService = {
     return user
   },
 
-  // getTagsByUserId: async (id: string) => {
-  //   const user = await User.findById(id).select('tags')
-  //   if (!user) return null
-  //   return user.tags
-  // },
+  getAllUser: async (search: string | undefined) => {
+    let users
+    if (search === undefined || search === null || search.trim() === '') {
+      users = await User.find().select('-password').lean()
+    } else {
+      users = await User.find({ username: { $regex: `^${search}`, $options: 'i' } })
+        .select('-password')
+        .lean()
+    }
+    return users
+  },
 
-  // createTagByUserId: async (id: string, tag: string) => {
-  //   const user = await User.findById(id)
-  //   if (!user) return null
-  //   if (user.tags.includes(tag)) {
-  //     return null
-  //   }
-  //   user.tags.push(tag)
-  //   await user.save()
-  //   return user
-  // },
+  getListUserById: async (listUserId: string[]) => {
+    let data = []
+    for (let id of listUserId) {
+      const user = await User.findById(id).select('-password').lean()
+      data.push(user)
+    }
+    return data
+  },
 
-  // deleteAllTags: async (id: string, tags: string[]) => {
-  //   const user = await User.findByIdAndUpdate(id, { $pull: { tags: { $in: tags } } }, { new: true })
-  //   return user
-  // },
-
-  // deleteTagByUserId: async (id: string, tag: string) => {
-  //   const user = await User.findById(id)
-  //   if (!user) return null
-  //   user.tags = user.tags.filter((t) => t !== tag)
-  //   await user.save()
-  //   return user
-  // }
+  getListUserByGroup: async ({ search, listUserId }: { search: string | undefined; listUserId: string[] }) => {
+    const users = await User.find({ _id: { $in: listUserId }, username: { $regex: `^${search}`, $options: 'i' } })
+      .select('-password')
+      .lean()
+    return users
+  }
 }

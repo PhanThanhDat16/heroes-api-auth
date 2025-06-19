@@ -17,7 +17,7 @@ const userSchema = new Schema(
       ],
       require: true,
       default: []
-    }
+    },
   },
   {
     versionKey: false,
@@ -26,7 +26,7 @@ const userSchema = new Schema(
   }
 )
 
-userSchema.index({ email: 1 })
+userSchema.index({ email: 1, username: 1 })
 
 export const User = mongoose.model('User', userSchema)
 
